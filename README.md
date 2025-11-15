@@ -1,4 +1,6 @@
 # phoe
+
+#### sources.yml
 ```
 version: 2
 
@@ -20,7 +22,10 @@ sources:
         identifier: address
 
 ```
-bronze
+# bronze
+### adress.sql
+
+
 ```
 With raw_address as (
     select
@@ -32,6 +37,7 @@ select
 
 from raw_address
 ```
+### customers.sql
 ```
 With raw_customers as (
     select
@@ -43,6 +49,7 @@ select
 
 from raw_customers
 ```
+### product_model.sql
 ```
 With raw_productmodel as (
     select
@@ -55,6 +62,7 @@ select
 from raw_productmodel
 
 ```
+### product.sql
 ```
 With raw_product as (
     select
@@ -66,6 +74,7 @@ select
 
 from raw_product
 ```
+### salesorderdetail.sql
 ```
 With raw_salesorderdetail as (
     select
@@ -77,6 +86,7 @@ select
 
 from raw_salesorderdetail
 ```
+### salesorderheader.sql
 ```
 With raw_salesorderheader as (
     select
@@ -88,7 +98,9 @@ select
 
 from raw_salesorderheader
 ```
-snapshots
+## snapshots
+### adress_snapshot.sql
+
 ```
 {% snapshot address_snapshot %}
 
@@ -115,6 +127,7 @@ where AddressID is not null
 {% endsnapshot %}
 
 ```
+### customers_snapshot.sql
 ```
 {% snapshot customers_snapshot %}
 
@@ -140,6 +153,7 @@ from {{ ref('customers') }}
 {% endsnapshot %}
 
 ```
+### Product_snapshot.sql
 ```
 {% snapshot product_snapshot %}
 
@@ -247,6 +261,7 @@ select * from cleaned
 
 {% endsnapshot %}
 ```
+### productmodel_snapshot.sql
 ```
 {% snapshot productmodel_snapshot %}
 
@@ -269,6 +284,8 @@ where ProductModelID is not null
 
 {% endsnapshot %}
 ```
+
+### salesorderdetail_snapshot
 ```
 {% snapshot salesorderdetail_snapshot %}
 
@@ -299,6 +316,8 @@ WHERE SalesOrderID is not null
 {% endsnapshot %}
 
 ```
+
+### salesorderheader.sql
 ```
 {% snapshot salesorderheader_snapshot %}
 
@@ -343,7 +362,9 @@ where SalesOrderID is not null
 
 {% endsnapshot %}
 ```
-gold
+## gold
+
+### dim_customers.sql
 ```
 {{
     config(
@@ -406,6 +427,7 @@ from dim_customers
 
  {% endif %}
  ```
+### fact_sales.sql
 ```
 with salesorderdetail_snapshot as (
     select
@@ -470,6 +492,8 @@ join lsalesorderheader_snapshot h
     on d.SalesOrderID = h.SalesOrderID
 where h.row_num = 1
 ```
+
+### dim_product.sql
 ```
 
 
@@ -552,12 +576,14 @@ transformed as (
 select *
 from transformed
 ```
+
+### dim_orders.sql
 ```
 with salesorderdetail_snapshot as (
     select
         SalesOrderID,
         SalesOrderDetailID,
-        ProductID, -- You're missing this join key!
+        ProductID, 
         CarrierTrackingNumber,
         OrderQuantity,
         SpecialOfferID,
