@@ -1,5 +1,14 @@
 # phoe
+## TESTING SNAPSHOTS
 
+```
+
+UPDATE ADV.DEV.ADDRESS
+SET 
+    CITY = 'Kenya',
+    MODIFIEDDATE = CURRENT_TIMESTAMP()
+WHERE ADDRESSID = 8;
+```
 #### sources.yml
 ```
 version: 2
